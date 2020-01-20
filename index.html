@@ -1,12 +1,57 @@
 <!DOCTYPE html>
 
- <meta charset="UTF-8"> 
-
-<html>
+<html lang="en">
 
 <head>
-
+  <meta charset="UTF-8">
   <title>Rock Paper Scissors</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+  <style>
+
+  body {
+
+    font-family: Courier, monospace;
+
+    text-align: center;
+
+}
+
+    #container{
+
+  max-width: 500px;
+
+  margin: auto;
+
+}
+
+
+
+#rock{
+
+    background-color: yellow;
+
+}
+
+
+
+#paper{
+
+    background-color: palegreen;
+
+}
+
+
+
+#scissors{
+
+    background-color: plum;
+
+}
+
+  </style>
 
 </head>
 
@@ -14,47 +59,237 @@
 
   <div id="container">
 
-  	<h3>Choose Rock, Paper, Scissors.</h3>
+  <h2>PAPER-ROCK-SCISSORS</h2>
 
-    <button id="rock">Rock</button>
+  <p id="instruction">Player Wins once they have reached 5 points</p>
 
-    <button id="paper">Paper</button>
+  <h3>Select the move!</h3>
 
-    <button id="scissors">Scissors</button>
+  <div class="btns">
 
-    <button id="reset">Reset score</button>
+<button type="button" name="Paper" class="sign" id="paper">Paper</button>
 
-  </div>
+<button type="button" name="Rock" class="sign" id="rock">Rock</button>
 
-  <div id="player">
+<button type="button" name="Scissors" class="sign" id="scissors">Scissors</button>
 
-    <h4>Player score:</h4>
+</div></br>
 
-    <p id="pscore">0</p>
+<h4 id="running-score">Human: <span id="human-result">0</span>, Computer: <span id="comp-result">0</span></h4></br>
 
-  </div>
 
-  <div id="computer">
 
-    <h4>Computer score:</h4>
+</div>
 
-    <p id="cscore">0</p>
 
-    <p id="compChoice">Computer Choice:</p>
 
-    <p id="results">Round result</p>
+  <script>
 
-  </div>
 
-  <div class="endtext">
 
-    <p id="congrats"></p>
+   let str;
 
-    <p id="maybe"></p>
+   let i = 0;
 
-  </div>
+   let playerSelection;
 
-  <script src="script.js"></script>
+   let computerSelection;
+
+   let scorePlayer = 0;
+
+   let scoreComputer = 0;
+
+
+
+   const container = document.querySelector("#container");
+
+   const signs = document.createElement("div");
+
+   signs.style.cssText = ("color: white; background-color: black; max-width: 400px");
+
+
+
+   const result = document.createElement("div");
+
+
+
+   const finalScore = document.createElement("h2");
+
+
+
+  const buttons = document.querySelectorAll(".sign");
+
+  buttons.forEach(function(button) {
+
+    button.addEventListener("click", function(e){
+
+      container.appendChild(signs);
+
+      container.appendChild(result);
+
+      str = button.id;
+
+      game();
+
+
+
+    });
+
+  });
+
+
+
+      function computerPlay(){
+
+        let moves = ["Paper", "Rock", "Scissors"];
+
+        let getRendomMove = moves[Math.floor(Math.random() * moves.length)];
+
+        return getRendomMove;
+
+      }
+
+
+
+      function playerPlay(){
+
+        return(str.charAt(0).toUpperCase() + str.slice(1));
+
+      }
+
+
+
+      function playRound(a,b){
+
+        if(a === b){
+
+          return ("It is draw!");
+
+        }else if(a === "Paper" && b === "Rock" || a === "Rock" && b === "Scissors" || a === "Scissors" && b === "Paper"){
+
+          scorePlayer += 1;
+
+          return ("You win! " + a + " beats " + b + "!");
+
+
+
+        }else{
+
+          scoreComputer += 1;
+
+          return ("You lose! " + b + " beats " + a + "!");
+
+        }
+
+      }
+
+
+
+      function replay() {
+
+        buttons.forEach(function(btn) {
+
+          btn.disabled = true;
+
+        });
+
+        const replayButton = document.createElement("button");
+
+        replayButton.textContent = "Replay";
+
+        container.appendChild(replayButton);
+
+
+
+        replayButton.addEventListener("click", function(e) {
+
+          buttons.forEach(function(btn) {
+
+            btn.disabled = false;
+
+          });
+
+          container.removeChild(replayButton);
+
+          container.removeChild(finalScore);
+
+          container.removeChild(signs);
+
+          container.removeChild(result);
+
+          scorePlayer = 0;
+
+          scoreComputer = 0;
+
+          document.getElementById("human-result").textContent = scorePlayer;
+
+          document.getElementById("comp-result").textContent = scoreComputer;
+
+        });
+
+
+
+      }
+
+
+
+      function game(){
+
+
+
+        i++;
+
+          playerSelection = playerPlay();
+
+          computerSelection = computerPlay();
+
+
+
+    signs.textContent = `Round ${i} -  Player: ${playerSelection }, Computer: ${computerSelection}`;
+
+    result.textContent = `${playRound(playerSelection, computerSelection)}`;
+
+
+
+    document.getElementById("human-result").textContent = scorePlayer;
+
+    document.getElementById("comp-result").textContent = scoreComputer;
+
+
+
+  if(scorePlayer === 5){   
+
+    container.appendChild(finalScore);
+
+    finalScore.textContent = `YOU WON THE GAME IN ${i} ROUNDS!`;
+
+    scorePlayer = 0;
+
+    scoreComputer = 0;
+
+    i = 0;
+
+    replay();    
+
+  }else if(scoreComputer === 5){   
+
+    container.appendChild(finalScore);
+
+    finalScore.textContent = `YOU LOST THE GAME IN ${i} ROUNDS!`;
+
+    scorePlayer = 0;
+
+    scoreComputer = 0;
+
+    i = 0;
+
+    replay();   
+
+  }
+
+}
+
+  </script>
 
 </body>
 
